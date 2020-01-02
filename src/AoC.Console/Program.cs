@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -19,17 +20,19 @@ namespace AoC.Console
             {
                 try
                 {
+
                     var puzzle = (IPuzzle)Activator.CreateInstance(puzzleType);
                     var puzzleName = puzzle.GetType().Name;
+
                     var input = File.ReadAllText($"{puzzleName}/input.txt");
 
                     var parsedInput = puzzle.ParseInput(input);
                     WriteLine($"{puzzleName}:");
-                    WriteLine("  part1");
-                    WriteLine("    " + puzzle.Part1(parsedInput));
+                    var watch = Stopwatch.StartNew();
+                    WriteLine($"  Answer for part 1: {puzzle.Part1(parsedInput)}, solved in {watch.ElapsedMilliseconds} ms");
 
-                    WriteLine("  part2");
-                    WriteLine("    " + puzzle.Part2(parsedInput));
+                    watch.Restart();
+                    WriteLine($"  Answer for part 2: {puzzle.Part2(parsedInput)}, solved in {watch.ElapsedMilliseconds} ms ");
                 }
                 catch (Exception e)
                 {
