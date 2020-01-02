@@ -20,7 +20,6 @@ namespace AoC.Console
             {
                 try
                 {
-
                     var puzzle = (IPuzzle)Activator.CreateInstance(puzzleType);
                     var puzzleName = puzzle.GetType().Name;
 
