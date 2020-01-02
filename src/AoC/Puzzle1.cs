@@ -3,18 +3,21 @@ using System.Linq;
 
 namespace AoC
 {
-    public class Puzzle1 : IPuzzle
+    public class Puzzle1 : IPuzzle<int[]>
     {
-        public object Part1(string input)
+        public int[] ParseInput(string input) => input
+                                                 .Split(new[] { Environment.NewLine }, StringSplitOptions.None)
+                                                 .Select(int.Parse)
+                                                 .ToArray();
+
+        public object Part1(int[] input)
         {
-            var modules = input.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Select(int.Parse).ToArray();
-            return modules.Sum(CalculateFuel);
+            return input.Sum(CalculateFuel);
         }
 
-        public object Part2(string input)
+        public object Part2(int[] input)
         {
-            var modules = input.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Select(int.Parse).ToArray();
-            return modules.Sum(CalculateFuelRecursive);
+            return input.Sum(CalculateFuelRecursive);
         }
 
         private static int CalculateFuel(int mass)

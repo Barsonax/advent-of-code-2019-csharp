@@ -1,9 +1,8 @@
-using System;
 using Xunit;
 
 namespace AoC.Tests
 {
-    public class UnitTest1
+    public class Puzzle1Tests
     {
         [Fact]
         public void Test1()
