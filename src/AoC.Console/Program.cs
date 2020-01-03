@@ -1,9 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-
-using static System.Console;
+﻿using static System.Console;
 
 namespace AoC.Console
 {
@@ -11,31 +6,19 @@ namespace AoC.Console
     {
         static void Main(string[] args)
         {
-            var puzzles = AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.Contains("AoC"))
-                                   .SelectMany(x => x.GetExportedTypes()).Where(x => typeof(IPuzzle).IsAssignableFrom(x)
-                                                                                     && !x.IsInterface
-                                                                                     && !x.IsAbstract).ToArray();
+            var runner = new PuzzleRunner();
 
-            foreach (Type puzzleType in puzzles)
+            foreach (var result in runner.Run())
             {
-                try
+                WriteLine($"{result.PuzzleName}:");
+                if (result.Part1.Error == null)
                 {
-                    var puzzle = (IPuzzle)Activator.CreateInstance(puzzleType);
-                    var puzzleName = puzzle.GetType().Name;
-
-                    var input = File.ReadAllText($"{puzzleName}/input.txt");
-
-                    var parsedInput = puzzle.ParseInput(input);
-                    WriteLine($"{puzzleName}:");
-                    var watch = Stopwatch.StartNew();
-                    WriteLine($"  Answer for part 1: {puzzle.Part1(parsedInput)}, solved in {watch.ElapsedMilliseconds} ms");
-
-                    watch.Restart();
-                    WriteLine($"  Answer for part 2: {puzzle.Part2(parsedInput)}, solved in {watch.ElapsedMilliseconds} ms ");
+                    WriteLine($"  Answer for part 1: {result.Part1.Result}, solved in {result.Part1.ElapsedMilliseconds} ms");
                 }
-                catch (Exception e)
+
+                if (result.Part2.Error == null)
                 {
-                    WriteLine($"The following error occurred while executing puzzle {puzzleType}: {e}");
+                    WriteLine($"  Answer for part 2: {result.Part2.Result}, solved in {result.Part2.ElapsedMilliseconds} ms ");
                 }
             }
         }
