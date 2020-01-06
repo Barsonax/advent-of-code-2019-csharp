@@ -81,10 +81,6 @@
 
         public void Execute(Memory memory)
         {
-            if (memory.Parameters[0].Value > 0)
-            {
-
-            }
             memory.Output.Push(memory.Parameters[0].Value);
         }
     }
