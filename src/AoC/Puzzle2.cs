@@ -39,8 +39,5 @@ namespace AoC
             }
             throw new InvalidOperationException();
         }
-
-
-
     }
 }

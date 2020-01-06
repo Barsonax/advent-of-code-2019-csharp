@@ -4,30 +4,98 @@
     {
         Add = 1,
         Multiply = 2,
+        Input = 3,
+        Output = 4,
         End = 99
     }
-    public readonly struct Instruction
-    {
-        public readonly OpCode OpCode;
-        public readonly int Input1;
-        public readonly int Input2;
-        public readonly int Output;
 
-        public Instruction(int[] array, int index)
+    public enum ParameterMode
+    {
+        Position = 0,
+        Immediate = 1
+    }
+
+    public interface IInstruction
+    {
+        int ParameterCount { get; }
+        void Execute(Memory memory);
+    }
+
+    public class Parameter
+    {
+        private readonly int[] _array;
+
+        public Parameter(int[] array)
         {
-            OpCode = (OpCode)array[index];
-            if (OpCode != OpCode.End)
+            _array = array;
+        }
+
+        public ParameterMode Mode { get; set; }
+        public int Index { get; set; }
+
+        public int Value
+        {
+            get => _array[Index];
+            set => _array[Index] = value;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+    }
+
+    public class AddInstruction : IInstruction
+    {
+        public int ParameterCount => 3;
+
+        public void Execute(Memory memory)
+        {
+            memory.Parameters[2].Value = memory.Parameters[0].Value + memory.Parameters[1].Value;
+        }
+    }
+
+    public class MultiplyInstruction : IInstruction
+    {
+        public int ParameterCount => 3;
+
+        public void Execute(Memory memory)
+        {
+            memory.Parameters[2].Value = memory.Parameters[0].Value * memory.Parameters[1].Value;
+        }
+    }
+
+    public class InputInstruction : IInstruction
+    {
+        public int ParameterCount => 1;
+
+        public void Execute(Memory memory)
+        {
+            memory.Parameters[0].Value = memory.Input.Pop();
+        }
+    }
+
+    public class OutputInstruction : IInstruction
+    {
+        public int ParameterCount => 1;
+
+        public void Execute(Memory memory)
+        {
+            if (memory.Parameters[0].Value > 0)
             {
-                Input1 = array[index + 1];
-                Input2 = array[index + 2];
-                Output = array[index + 3];
+
             }
-            else
-            {
-                Input1 = 0;
-                Input2 = 0;
-                Output = 0;
-            }
+            memory.Output.Push(memory.Parameters[0].Value);
+        }
+    }
+
+    public class EndInstruction : IInstruction
+    {
+        public int ParameterCount => 0;
+
+        public void Execute(Memory memory)
+        {
+
         }
     }
 }

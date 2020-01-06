@@ -17,6 +17,9 @@ namespace AoC.Tests
                 Add(new PuzzleResult("puzzle2",
                     new PuzzlePartResult(6627023),
                     new PuzzlePartResult(4019)));
+                Add(new PuzzleResult("puzzle5",
+                    new PuzzlePartResult(11933517)
+                    ));
             }
         }
 
@@ -29,7 +32,10 @@ namespace AoC.Tests
             var puzzleResult = runner.Run(expectedPuzzleResult.PuzzleName);
 
             Assert.Equal(expectedPuzzleResult.Part1.Result, puzzleResult.Part1.Result);
-            Assert.Equal(expectedPuzzleResult.Part2.Result, puzzleResult.Part2.Result);
+            if (expectedPuzzleResult.Part2 != null)
+            {
+                Assert.Equal(expectedPuzzleResult.Part2.Result, puzzleResult.Part2.Result);
+            }
         }
     }
 }

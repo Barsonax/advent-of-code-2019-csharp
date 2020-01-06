@@ -7,7 +7,7 @@
             PuzzleName = puzzleName;
         }
 
-        public PuzzleResult(string puzzleName, PuzzlePartResult part1, PuzzlePartResult part2)
+        public PuzzleResult(string puzzleName, PuzzlePartResult part1, PuzzlePartResult? part2 = null)
         {
             PuzzleName = puzzleName;
             Part1 = part1;
@@ -16,7 +16,7 @@
 
         public string PuzzleName { get; }
         public PuzzlePartResult Part1 { get; set; }
-        public PuzzlePartResult Part2 { get; set; }
+        public PuzzlePartResult? Part2 { get; set; }
 
     }
 }
