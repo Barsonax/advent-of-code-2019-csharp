@@ -60,5 +60,115 @@ namespace AoC.Tests
 
             Assert.Equal(new[] { 11933517, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, computer.Memory.Output);
         }
+
+        [Fact]
+        public void EqualTo_PositionMode_False()
+        {
+            var computer = new IntCodeComputer();
+            var program = new[] { 3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8 };
+
+            var result = computer.ExecuteProgram(program, 7);
+
+            Assert.Equal(0, computer.Memory.Output.Peek());
+        }
+
+        [Fact]
+        public void EqualTo_PositionMode_True()
+        {
+            var computer = new IntCodeComputer();
+            var program = new[] { 3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8 };
+
+            var result = computer.ExecuteProgram(program, 8);
+
+            Assert.Equal(1, computer.Memory.Output.Peek());
+        }
+
+        [Fact]
+        public void EqualTo_ImmediateMode_False()
+        {
+            var computer = new IntCodeComputer();
+            var program = new[] { 3, 3, 1108, -1, 8, 3, 4, 3, 99 };
+
+            var result = computer.ExecuteProgram(program, 7);
+
+            Assert.Equal(0, computer.Memory.Output.Peek());
+        }
+
+        [Fact]
+        public void EqualTo_ImmediateMode_True()
+        {
+            var computer = new IntCodeComputer();
+            var program = new[] { 3, 3, 1108, -1, 8, 3, 4, 3, 99 };
+
+            var result = computer.ExecuteProgram(program, 8);
+
+            Assert.Equal(1, computer.Memory.Output.Peek());
+        }
+
+        [Fact]
+        public void LessThan_PositionMode_False()
+        {
+            var computer = new IntCodeComputer();
+            var program = new[] { 3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8 };
+
+            var result = computer.ExecuteProgram(program, 8);
+
+            Assert.Equal(0, computer.Memory.Output.Peek());
+        }
+
+        [Fact]
+        public void LessThan_PositionMode_True()
+        {
+            var computer = new IntCodeComputer();
+            var program = new[] { 3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8 };
+
+            var result = computer.ExecuteProgram(program, 7);
+
+            Assert.Equal(1, computer.Memory.Output.Peek());
+        }
+
+        [Fact]
+        public void JumpIfFalse_PositionMode_True()
+        {
+            var computer = new IntCodeComputer();
+            var program = new[] { 3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9 };
+
+            var result = computer.ExecuteProgram(program, 7);
+
+            Assert.Equal(1, computer.Memory.Output.Peek());
+        }
+
+        [Fact]
+        public void JumpIfFalse_PositionMode_False()
+        {
+            var computer = new IntCodeComputer();
+            var program = new[] { 3, 12, 6, 12, 15, 1, 13, 14, 13, 4, 13, 99, -1, 0, 1, 9 };
+
+            var result = computer.ExecuteProgram(program, 0);
+
+            Assert.Equal(0, computer.Memory.Output.Peek());
+        }
+
+        [Fact]
+        public void JumpIfTrue_ImmediateMode_True()
+        {
+            var computer = new IntCodeComputer();
+            var program = new[] { 3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1 };
+
+            var result = computer.ExecuteProgram(program, 7);
+
+            Assert.Equal(1, computer.Memory.Output.Peek());
+        }
+
+        [Fact]
+        public void JumpIfTrue_ImmediateMode_False()
+        {
+            var computer = new IntCodeComputer();
+            var program = new[] { 3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1 };
+
+            var result = computer.ExecuteProgram(program, 0);
+
+            Assert.Equal(0, computer.Memory.Output.Peek());
+        }
     }
 }

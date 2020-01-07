@@ -4,28 +4,9 @@ using System.Linq;
 
 namespace AoC
 {
-    public class Memory
-    {
-        public Stack<int> Input { get; set; } = new Stack<int>();
-        public Stack<int> Output { get; set; } = new Stack<int>();
-
-        public Parameter[] Parameters { get; } = new Parameter[16];
-
-        public int[] Program { get; set; }
-        public int InstructionPointer { get; set; }
-    }
     public class IntCodeComputer
     {
         public Memory Memory = new Memory();
-
-        private Dictionary<OpCode, IInstruction> InstructionSet { get; } = new Dictionary<OpCode, IInstruction>
-        {
-            { OpCode.Add, new AddInstruction()},
-            { OpCode.Multiply, new MultiplyInstruction() },
-            { OpCode.Input, new InputInstruction()},
-            { OpCode.Output, new OutputInstruction()},
-            { OpCode.End, new EndInstruction()}
-        };
 
         private OpCode ParseOpCode(ReadOnlySpan<char> code)
         {
@@ -80,11 +61,9 @@ namespace AoC
             {
                 var code = Memory.Program[Memory.InstructionPointer].ToString("D2").AsSpan();
                 var opCode = ParseOpCode(code);
-                var instruction = InstructionSet[opCode];
+                ExecuteOpCode(opCode, code, Memory);
 
-                ParseParameters(code, Memory, instruction.ParameterCount);
-                log.Add(new InstructionLog(opCode, Memory.Parameters.Take(instruction.ParameterCount).Select(x => new ParameterLog(x)).ToArray()));
-                instruction.Execute(Memory);
+                //log.Add(new InstructionLog(opCode, Memory.Parameters.Take(instruction.ParameterCount).Select(x => new ParameterLog(x)).ToArray()));
                 if (opCode == OpCode.End)
                 {
                     return Memory.Program[0];
@@ -92,6 +71,49 @@ namespace AoC
             }
 
             throw new InvalidOperationException();
+        }
+
+        private void ExecuteOpCode(OpCode opCode, ReadOnlySpan<char> code, Memory memory)
+        {
+            switch (opCode)
+            {
+                case OpCode.Add:
+                    ParseParameters(code, Memory, 3);
+                    memory.Parameters[2].Value = memory.Parameters[0].Value + memory.Parameters[1].Value;
+                    break;
+                case OpCode.Multiply:
+                    ParseParameters(code, Memory, 3);
+                    memory.Parameters[2].Value = memory.Parameters[0].Value * memory.Parameters[1].Value;
+                    break;
+                case OpCode.Input:
+                    ParseParameters(code, Memory, 1);
+                    memory.Parameters[0].Value = memory.Input.Pop();
+                    break;
+                case OpCode.Output:
+                    ParseParameters(code, Memory, 1);
+                    memory.Output.Push(memory.Parameters[0].Value);
+                    break;
+                case OpCode.JumpTrue:
+                    ParseParameters(code, Memory, 2);
+                    if (memory.Parameters[0].Value != 0) memory.InstructionPointer = memory.Parameters[1].Value;
+                    break;
+                case OpCode.JumpFalse:
+                    ParseParameters(code, Memory, 2);
+                    if (memory.Parameters[0].Value == 0) memory.InstructionPointer = memory.Parameters[1].Value;
+                    break;
+                case OpCode.LessThan:
+                    ParseParameters(code, Memory, 3);
+                    memory.Parameters[2].Value = memory.Parameters[0].Value < memory.Parameters[1].Value ? 1 : 0;
+                    break;
+                case OpCode.Equals:
+                    ParseParameters(code, Memory, 3);
+                    memory.Parameters[2].Value = memory.Parameters[0].Value == memory.Parameters[1].Value ? 1 : 0;
+                    break;
+                case OpCode.End:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(opCode), opCode.ToString());
+            }
         }
 
         public class InstructionLog

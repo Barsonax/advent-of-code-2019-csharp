@@ -19,7 +19,9 @@ namespace AoC
 
         public object Part2(int[] input)
         {
-            throw new NotImplementedException();
+            var computer = new IntCodeComputer();
+            computer.ExecuteProgram(input, 5);
+            return computer.Memory.Output.Peek();
         }
     }
 }
