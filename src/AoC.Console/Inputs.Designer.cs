@@ -156,7 +156,7 @@ namespace AoC.Console {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 147981-691423.
         /// </summary>
         public static string puzzle4 {
             get {
