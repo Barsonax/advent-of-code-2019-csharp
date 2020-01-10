@@ -17,9 +17,10 @@ namespace AoC
         {
             var counter = 0;
 
+            var digitBuffer = new int[6];
             foreach (int candidate in Enumerable.Range(input.Start.Value, input.End.Value - input.Start.Value))
             {
-                if (IsValidPassword(candidate))
+                if (IsValidPassword(candidate, digitBuffer))
                 {
                     counter++;
                 }
@@ -32,9 +33,10 @@ namespace AoC
         {
             var counter = 0;
 
+            var digitBuffer = new int[6];
             foreach (int candidate in Enumerable.Range(input.Start.Value, input.End.Value - input.Start.Value))
             {
-                if (IsValidPassword2(candidate))
+                if (IsValidPassword2(candidate, digitBuffer))
                 {
                     counter++;
                 }
@@ -43,28 +45,28 @@ namespace AoC
             return counter;
         }
 
-        public static bool IsValidPassword(int number)
+        public static bool IsValidPassword(int number, int[] digitBuffer)
         {
-            if (number / 100000 > 0)
-            {
-                var digits = number.ToString().Select(x => (int)x).ToArray();
+            ExtractDigits(number, digitBuffer);
 
-                return DigitsNeverDecrease(digits) && AdjacentDigitsAreSame(digits);
-            }
-
-            return false;
+            return DigitsNeverDecrease(digitBuffer) && AdjacentDigitsAreSame(digitBuffer);
         }
 
-        public static bool IsValidPassword2(int number)
+        public static bool IsValidPassword2(int number, int[] digitBuffer)
         {
-            if (number / 100000 > 0)
-            {
-                var digits = number.ToString().Select(x => (int)x).ToArray();
+            ExtractDigits(number, digitBuffer);
 
-                return DigitsNeverDecrease(digits) && AdjacentDigitsAreSameAndNotPartOfGroup(digits);
-            }
+            return DigitsNeverDecrease(digitBuffer) && AdjacentDigitsAreSameAndNotPartOfGroup(digitBuffer);
+        }
 
-            return false;
+        public static void ExtractDigits(int number, int[] digitBuffer)
+        {
+            digitBuffer[0] = number / 100000 % 10;
+            digitBuffer[1] = number / 10000 % 10;
+            digitBuffer[2] = number / 1000 % 10;
+            digitBuffer[3] = number / 100 % 10;
+            digitBuffer[4] = number / 10 % 10;
+            digitBuffer[5] = number % 10;
         }
 
         private static bool DigitsNeverDecrease(int[] digits)
@@ -113,3 +115,4 @@ namespace AoC
         }
     }
 }
+
