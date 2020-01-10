@@ -18,8 +18,14 @@ namespace AoC.Tests
                     new PuzzlePartResult(6627023),
                     new PuzzlePartResult(4019)));
                 Add(new PuzzleResult("puzzle5",
-                    new PuzzlePartResult(11933517)
+                    new PuzzlePartResult(11933517),
+                    new PuzzlePartResult(10428568)
                     ));
+
+                Add(new PuzzleResult("puzzle7",
+                    new PuzzlePartResult(422858),
+                    new PuzzlePartResult(14897241)
+                ));
             }
         }
 

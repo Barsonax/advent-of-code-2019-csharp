@@ -2,20 +2,20 @@
 {
     public class Parameter
     {
-        private readonly int[] _array;
+        private readonly Memory _memory;
 
-        public Parameter(int[] array)
+        public Parameter(Memory memory)
         {
-            _array = array;
+            _memory = memory;
         }
 
         public ParameterMode Mode { get; set; }
-        public int Index { get; set; }
+        public long Index { get; set; }
 
-        public int Value
+        public long Value
         {
-            get => _array[Index];
-            set => _array[Index] = value;
+            get => _memory.Program[Index];
+            set => _memory.Program[Index] = value;
         }
 
         public override string ToString()

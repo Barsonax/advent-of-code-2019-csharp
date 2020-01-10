@@ -10,12 +10,12 @@ namespace AoC
                                                  .Select(int.Parse)
                                                  .ToArray();
 
-        public object Part1(int[] input)
+        public long Part1(int[] input)
         {
             return input.Sum(CalculateFuel);
         }
 
-        public object Part2(int[] input)
+        public long Part2(int[] input)
         {
             return input.Sum(CalculateFuelRecursive);
         }

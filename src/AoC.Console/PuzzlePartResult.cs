@@ -4,12 +4,7 @@ namespace AoC.Console
 {
     public class PuzzlePartResult
     {
-        public PuzzlePartResult(int result, long elapsedMilliseconds = 0)
-        {
-            Result = result;
-            ElapsedMilliseconds = elapsedMilliseconds;
-        }
-        public PuzzlePartResult(object result, long elapsedMilliseconds)
+        public PuzzlePartResult(long result, long elapsedMilliseconds = 0)
         {
             Result = result;
             ElapsedMilliseconds = elapsedMilliseconds;

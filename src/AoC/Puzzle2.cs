@@ -3,24 +3,27 @@ using System.Linq;
 
 namespace AoC
 {
-    public class Puzzle2 : IPuzzle<int[]>
+    public class Puzzle2 : IPuzzle<long[]>
     {
-        public int[] ParseInput(string input) => input
+        public long[] ParseInput(string input) => input
                                                  .Split(new[] { "," }, StringSplitOptions.None)
-                                                 .Select(int.Parse)
+                                                 .Select(long.Parse)
                                                  .ToArray();
 
-        public object Part1(int[] input)
+        public long Part1(long[] input)
         {
-            var computer = new IntCodeComputer();
             input[1] = 12;
             input[2] = 2;
-            return computer.ExecuteProgram(input);
+            var memory = new Memory(input);
+            var runner = new ProgramRunner(memory);
+
+            runner.Execute();
+
+            return memory.Program[0];
         }
 
-        public object Part2(int[] input)
+        public long Part2(long[] input)
         {
-            var computer = new IntCodeComputer();
             var desiredOutput = 19690720;
 
             for (int noun = 0; noun < 99; noun++)
@@ -30,8 +33,10 @@ namespace AoC
                     input[1] = noun;
                     input[2] = verb;
 
-                    var result = computer.ExecuteProgram(input);
-                    if (result == desiredOutput)
+                    var memory = new Memory(input);
+                    var runner = new ProgramRunner(memory);
+                    runner.Execute();
+                    if (memory.Program[0] == desiredOutput)
                     {
                         return 100 * noun + verb;
                     }

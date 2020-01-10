@@ -6,6 +6,13 @@ namespace AoC.Console
     {
         static void Main(string[] args)
         {
+            //var puzzle = new Puzzle2();
+            //var input = puzzle.ParseInput(Inputs.puzzle2);
+            //while (true)
+            //{
+            //    puzzle.Part2(input);
+            //}
+
             var runner = new PuzzleRunner();
 
             foreach (var result in runner.Run())

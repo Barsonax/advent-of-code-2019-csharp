@@ -3,25 +3,31 @@ using System.Linq;
 
 namespace AoC
 {
-    public class Puzzle5 : IPuzzle<int[]>
+    public class Puzzle5 : IPuzzle<long[]>
     {
-        public int[] ParseInput(string input) => input
+        public long[] ParseInput(string input) => input
                                                  .Split(new[] { "," }, StringSplitOptions.None)
-                                                 .Select(int.Parse)
+                                                 .Select(long.Parse)
                                                  .ToArray();
 
-        public object Part1(int[] input)
+        public long Part1(long[] input)
         {
-            var computer = new IntCodeComputer();
-            computer.ExecuteProgram(input, 1);
-            return computer.Memory.Output.Peek();
+            var memory = new Memory(input);
+            memory.AddInputs(1);
+
+            var runner = new ProgramRunner(memory);
+            runner.Execute();
+            return memory.Output.Peek();
         }
 
-        public object Part2(int[] input)
+        public long Part2(long[] input)
         {
-            var computer = new IntCodeComputer();
-            computer.ExecuteProgram(input, 5);
-            return computer.Memory.Output.Peek();
+            var memory = new Memory(input);
+            memory.AddInputs(5);
+
+            var runner = new ProgramRunner(memory);
+            runner.Execute();
+            return memory.Output.Peek();
         }
     }
 }
