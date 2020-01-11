@@ -47,12 +47,14 @@ namespace AoC
             InstructionPointer = 0;
         }
 
-        public void AddInputs(params int[] inputs)
+        public Memory AddInputs(params int[] inputs)
         {
             foreach (var input in inputs)
             {
                 Input.Enqueue(input);
             }
+
+            return this;
         }
     }
 }

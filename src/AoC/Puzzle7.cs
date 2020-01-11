@@ -13,82 +13,37 @@ namespace AoC
 
         public long Part1(long[] input)
         {
-            var permutations = new[] { 0, 1, 2, 3, 4 }.GetPermutations();
-
-            long maxScore = 0;
-
-            foreach (var permutation in permutations)
-            {
-                var score = RunAmplifiers(input, permutation[0], permutation[1], permutation[2], permutation[3], permutation[4]);
-                if (score > maxScore) maxScore = score;
-            }
-
-            return maxScore;
-        }
-
-        private long RunAmplifiers(long[] program, int phase1, int phase2, int phase3, int phase4, int phase5)
-        {
-            var amplifiers = Enumerable.Range(0, 5).Select(x => new Memory(program)).ToArray();
-
-            long start = 0;
-            amplifiers[0].AddInputs(phase1);
-            amplifiers[1].AddInputs(phase2);
-            amplifiers[2].AddInputs(phase3);
-            amplifiers[3].AddInputs(phase4);
-            amplifiers[4].AddInputs(phase5);
-
-            for (int i = 0; i < amplifiers.Length; i++)
-            {
-                amplifiers[i].Input.Enqueue(start);
-                var runner = new ProgramRunner(amplifiers[i]);
-                runner.First(x => x == OpCode.Output);
-                start = amplifiers[i].Output.Pop();
-            }
-
-            return start;
-        }
-
-        private long RunAmplifierLoop(long[] program, int phase1, int phase2, int phase3, int phase4, int phase5)
-        {
-            var amplifiers = Enumerable.Range(0, 5).Select(x => new Memory(program)).ToArray();
-
-            long start = 0;
-            amplifiers[0].AddInputs(phase1);
-            amplifiers[1].AddInputs(phase2);
-            amplifiers[2].AddInputs(phase3);
-            amplifiers[3].AddInputs(phase4);
-            amplifiers[4].AddInputs(phase5);
-
-            var foo = 0;
-            while (true)
-            {
-                for (int i = 0; i < amplifiers.Length; i++)
-                {
-                    amplifiers[i].Input.Enqueue(start);
-                    var runner = new ProgramRunner(amplifiers[i]);
-                    var hasOutput = runner.Any(x => x == OpCode.Output);
-                    if (!hasOutput) return start;
-                    start = amplifiers[i].Output.Pop();
-                    
-                }
-
-                foo++;
-            }
+            return new[] { 0, 1, 2, 3, 4 }.GetPermutations().Max(x => RunAmplifier(input, x).First());
         }
 
         public long Part2(long[] input)
         {
-            var permutations = new[] { 5, 6, 7, 8, 9 }.GetPermutations();
+            return new[] { 5, 6, 7, 8, 9 }.GetPermutations().Max(x => RunAmplifier(input, x).Last());
+        }
 
-            long maxScore = 0;
+        private IEnumerable<long> RunAmplifier(long[] program, int[] phaseSettings)
+        {
+            var amplifiers = phaseSettings.Select(x => new Memory(program).AddInputs(x)).ToArray();
 
-            foreach (var permutation in permutations)
+            long start = 0;
+
+            while (true)
             {
-                var score = RunAmplifierLoop(input, permutation[0], permutation[1], permutation[2], permutation[3], permutation[4]);
-                if (score > maxScore) maxScore = score;
-            }
+                foreach (Memory amplifier in amplifiers)
+                {
+                    amplifier.Input.Enqueue(start);
+                    var runner = new ProgramRunner(amplifier);
+                    var hasOutput = runner.Any(x => x == OpCode.Output);
+                    if (!hasOutput)
+                    {
+                        yield return start;
+                        yield break;
+                    }
+                    start = amplifier.Output.Pop();
+                }
 
-            return maxScore;
+                yield return start;
+            }
         }
     }
 
