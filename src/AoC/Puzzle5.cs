@@ -12,8 +12,7 @@ namespace AoC
 
         public long Part1(long[] input)
         {
-            var memory = new Memory(input);
-            memory.AddInputs(1);
+            var memory = new Memory(input).AddInputs(1);
 
             var runner = new ProgramRunner(memory);
             runner.Execute();
@@ -22,8 +21,7 @@ namespace AoC
 
         public long Part2(long[] input)
         {
-            var memory = new Memory(input);
-            memory.AddInputs(5);
+            var memory = new Memory(input).AddInputs(5);
 
             var runner = new ProgramRunner(memory);
             runner.Execute();

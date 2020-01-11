@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AoC
 {
@@ -15,34 +13,14 @@ namespace AoC
 
         public long Part1(Range input)
         {
-            var counter = 0;
-
             var digitBuffer = new int[6];
-            foreach (int candidate in Enumerable.Range(input.Start.Value, input.End.Value - input.Start.Value))
-            {
-                if (IsValidPassword(candidate, digitBuffer))
-                {
-                    counter++;
-                }
-            }
-
-            return counter;
+            return input.ToSequence().Count(x => IsValidPassword(x, digitBuffer));
         }
 
         public long Part2(Range input)
         {
-            var counter = 0;
-
             var digitBuffer = new int[6];
-            foreach (int candidate in Enumerable.Range(input.Start.Value, input.End.Value - input.Start.Value))
-            {
-                if (IsValidPassword2(candidate, digitBuffer))
-                {
-                    counter++;
-                }
-            }
-
-            return counter;
+            return input.ToSequence().Count(x => IsValidPassword2(x, digitBuffer));
         }
 
         public static bool IsValidPassword(int number, int[] digitBuffer)
