@@ -7,29 +7,20 @@ namespace AoC
 {
     public class ProgramRunner : IEnumerator<OpCode>, IEnumerable<OpCode>
     {
+        private static readonly int[] ParameterMasks = Enumerable.Range(0, 4).Select(x => 100 * (int)Math.Pow(10, x)).ToArray();
+
         private readonly Memory _memory;
 
-        public ProgramRunner(Memory memory)
-        {
-            _memory = memory;
-        }
-
-        private static readonly int[] ParameterMasks = Enumerable.Range(0, 4).Select(x => 100 * (int)Math.Pow(10, x)).ToArray();
+        public ProgramRunner(Memory memory) => _memory = memory;
 
         public void Execute()
         {
             while (MoveNext()) { }
         }
 
-        public static OpCode ParseOpCode(long code)
-        {
-            return (OpCode)(code % 100);
-        }
+        public static OpCode ParseOpCode(long code) => (OpCode)(code % 100);
 
-        public static ParameterMode ParseParameterMode(long code, int parameterPosition)
-        {
-            return (ParameterMode)(code / ParameterMasks[parameterPosition] % 10);
-        }
+        public static ParameterMode ParseParameterMode(long code, int parameterPosition) => (ParameterMode)(code / ParameterMasks[parameterPosition] % 10);
 
         private void ExecuteOpCode(long code, OpCode opCode, Memory memory)
         {
@@ -127,28 +118,16 @@ namespace AoC
             return true;
         }
 
-        public void Reset()
-        {
-            _memory.InstructionPointer = 0;
-        }
+        public void Reset() => _memory.InstructionPointer = 0;
 
         public OpCode Current { get; private set; }
 
         object IEnumerator.Current => Current;
 
-        public void Dispose()
-        {
+        public void Dispose() { }
 
-        }
+        public IEnumerator<OpCode> GetEnumerator() => this;
 
-        public IEnumerator<OpCode> GetEnumerator()
-        {
-            return this;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
