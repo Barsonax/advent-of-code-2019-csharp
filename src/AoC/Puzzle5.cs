@@ -12,20 +12,20 @@ namespace AoC
 
         public long Part1(long[] input)
         {
-            var memory = new Memory(input).AddInputs(1);
+            var vm = new IntCodeVM(input).AddInputs(1);
 
-            var runner = new ProgramRunner(memory);
-            runner.Execute();
-            return memory.Output.Peek();
+            var process = new Process(vm);
+            process.Run();
+            return vm.Output.Peek();
         }
 
         public long Part2(long[] input)
         {
-            var memory = new Memory(input).AddInputs(5);
+            var vm = new IntCodeVM(input).AddInputs(5);
 
-            var runner = new ProgramRunner(memory);
-            runner.Execute();
-            return memory.Output.Peek();
+            var process = new Process(vm);
+            process.Run();
+            return vm.Output.Peek();
         }
     }
 }

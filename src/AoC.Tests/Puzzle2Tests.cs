@@ -15,11 +15,11 @@ namespace AoC.Tests
             [InlineData(new long[] { 1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50 }, new long[] { 3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50 })]
             public void Examples(long[] program, long[] expectedOutput)
             {
-                var memory = new Memory(program);
-                var computer = new ProgramRunner(memory);
-                computer.Execute();
+                var vm = new IntCodeVM(program);
+                var process = new Process(vm);
+                process.Run();
 
-                Assert.Equal(expectedOutput, memory.Program);
+                Assert.Equal(expectedOutput, vm.Memory);
             }
         }
     }

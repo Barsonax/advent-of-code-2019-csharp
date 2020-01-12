@@ -9,30 +9,17 @@ namespace AoC
         public Queue<long> Input { get; set; } = new Queue<long>();
         public Stack<long> Output { get; set; } = new Stack<long>();
 
-        public Parameter[][] Parameters { get; }
-
         public long[] Program { get; set; }
         public long InstructionPointer { get; set; }
 
-        public Memory(int[] program) : this()
+        public Memory(int[] program)
         {
             LoadProgram(program);
         }
 
-        public Memory(long[] program) : this()
+        public Memory(long[] program) 
         {
             LoadProgram(program);
-        }
-
-        public Memory()
-        {
-            var parameters = Enumerable.Range(0, 4).Select(x => new Parameter(this)).ToArray().AsSpan();
-
-            Parameters = new Parameter[parameters.Length][];
-            for (int i = 0; i < parameters.Length; i++)
-            {
-                Parameters[i] = parameters.Slice(0, i).ToArray();
-            }
         }
 
         public void LoadProgram(int[] program)

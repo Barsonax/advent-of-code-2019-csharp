@@ -23,16 +23,16 @@ namespace AoC
 
         private IEnumerable<long> RunAmplifier(long[] program, int[] phaseSettings)
         {
-            var amplifiers = phaseSettings.Select(x => new Memory(program).AddInputs(x)).ToArray();
+            var amplifiers = phaseSettings.Select(x => new IntCodeVM(program).AddInputs(x)).ToArray();
 
             long start = 0;
 
             while (true)
             {
-                foreach (Memory amplifier in amplifiers)
+                foreach (IntCodeVM amplifier in amplifiers)
                 {
                     amplifier.Input.Enqueue(start);
-                    var runner = new ProgramRunner(amplifier);
+                    var runner = new InteruptableProcess(amplifier);
                     var hasOutput = runner.Any(x => x == OpCode.Output);
                     if (!hasOutput)
                     {

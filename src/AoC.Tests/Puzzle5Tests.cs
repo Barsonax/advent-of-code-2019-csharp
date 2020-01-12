@@ -14,12 +14,12 @@ namespace AoC.Tests
             [InlineData(new long[] { 1101, 100, -1, 4, 0 }, new long[] { 1101, 100, -1, 4, 99 })]
             public void Examples(long[] program, long[] expectedProgramState, params int[] inputs)
             {
-                var memory = new Memory(program).AddInputs(inputs);
+                var vm = new IntCodeVM(program).AddInputs(inputs);
 
-                var computer = new ProgramRunner(memory);
-                computer.Execute();
+                var process = new Process(vm);
+                process.Run();
 
-                Assert.Equal(expectedProgramState, memory.Program);
+                Assert.Equal(expectedProgramState, vm.Memory);
             }
         }
 
@@ -38,12 +38,12 @@ namespace AoC.Tests
             [InlineData(new long[] { 3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1 }, 0, 0)]
             public void Examples(long[] program, int input, int expectedOutput)
             {
-                var memory = new Memory(program).AddInputs(input);
+                var vm = new IntCodeVM(program).AddInputs(input);
 
-                var computer = new ProgramRunner(memory);
-                computer.Execute();
+                var process = new Process(vm);
+                process.Run();
 
-                Assert.Equal(expectedOutput, memory.Output.Peek());
+                Assert.Equal(expectedOutput, vm.Output.Peek());
             }
         }
 
@@ -61,13 +61,13 @@ namespace AoC.Tests
         [ClassData(typeof(OpCodeParseData))]
         public void ParseOpCode(int code, int parameterCount, OpCode expectedOpCode, ParameterMode[] expectedParameterModes)
         {
-            var opCode = ProgramRunner.ParseOpCode(code);
+            var opCode = IntCodeVM.ParseOpCode(code);
 
             var parameters = new ParameterMode[parameterCount];
 
             for (int i = 0; i < parameters.Length; i++)
             {
-                parameters[i] = ProgramRunner.ParseParameterMode(code, i);
+                parameters[i] = IntCodeVM.ParseParameterMode(code, i);
             }
 
             Assert.Equal(expectedOpCode, opCode);

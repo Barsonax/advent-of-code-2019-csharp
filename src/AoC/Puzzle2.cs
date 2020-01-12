@@ -14,12 +14,12 @@ namespace AoC
         {
             input[1] = 12;
             input[2] = 2;
-            var memory = new Memory(input);
-            var runner = new ProgramRunner(memory);
+            var vm = new IntCodeVM(input);
+            var process = new Process(vm);
 
-            runner.Execute();
+            process.Run();
 
-            return memory.Program[0];
+            return vm.Memory[0];
         }
 
         public long Part2(long[] input)
@@ -33,10 +33,10 @@ namespace AoC
                     input[1] = noun;
                     input[2] = verb;
 
-                    var memory = new Memory(input);
-                    var runner = new ProgramRunner(memory);
-                    runner.Execute();
-                    if (memory.Program[0] == desiredOutput)
+                    var vm = new IntCodeVM(input);
+                    var process = new Process(vm);
+                    process.Run();
+                    if (vm.Memory[0] == desiredOutput)
                     {
                         return 100 * noun + verb;
                     }
