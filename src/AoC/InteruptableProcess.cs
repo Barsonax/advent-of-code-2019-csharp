@@ -33,7 +33,7 @@ namespace AoC
             return true;
         }
 
-        public void Reset() => _vm.InstructionPointer = 0;
+        public void Reset() { }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

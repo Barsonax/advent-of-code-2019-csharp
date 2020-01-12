@@ -31,6 +31,10 @@ namespace AoC.Tests
                     new PuzzlePartResult(422858),
                     new PuzzlePartResult(14897241)
                 ));
+                Add(new PuzzleResult("puzzle9",
+                    new PuzzlePartResult(2955820355),
+                    new PuzzlePartResult(46643)
+                ));
             }
         }
 

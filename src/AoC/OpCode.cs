@@ -10,6 +10,7 @@
         JumpFalse = 6,
         LessThan = 7,
         Equals = 8,
+        Relative = 9,
         End = 99
     }
 }

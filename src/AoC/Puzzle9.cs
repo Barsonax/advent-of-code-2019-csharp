@@ -23,7 +23,11 @@ namespace AoC
 
         public long Part2(long[] input)
         {
-            throw new NotImplementedException();
+            var vm = new IntCodeVM(input).AddInputs(2);
+
+            var process = new Process(vm);
+            process.Run();
+            return vm.Output.Peek();
         }
     }
 }

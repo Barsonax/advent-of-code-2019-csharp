@@ -39,7 +39,7 @@ namespace AoC
                         yield return start;
                         yield break;
                     }
-                    start = amplifier.Output.Pop();
+                    start = amplifier.Output.Dequeue();
                 }
 
                 yield return start;

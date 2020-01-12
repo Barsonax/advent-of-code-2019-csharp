@@ -16,7 +16,7 @@ namespace AoC
 
             var process = new Process(vm);
             process.Run();
-            return vm.Output.Peek();
+            return vm.Output.Last();
         }
 
         public long Part2(long[] input)
@@ -25,7 +25,7 @@ namespace AoC
 
             var process = new Process(vm);
             process.Run();
-            return vm.Output.Peek();
+            return vm.Output.Last();
         }
     }
 }
