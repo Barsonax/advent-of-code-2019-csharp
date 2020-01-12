@@ -23,37 +23,37 @@ namespace AoC
             switch (opCode)
             {
                 case OpCode.Add:
-                    Execute(code, delegate (ref long p1, ref long p2, ref long p3) { p3 = p1 + p2; });
+                    Execute(code, (ref long p1, ref long p2, ref long p3) => p3 = p1 + p2);
                     break;
                 case OpCode.Multiply:
-                    Execute(code, delegate (ref long p1, ref long p2, ref long p3) { p3 = p1 * p2; });
+                    Execute(code, (ref long p1, ref long p2, ref long p3) => p3 = p1 * p2);
                     break;
                 case OpCode.Input:
-                    Execute(code, delegate (ref long p1) { p1 = Input.Dequeue(); });
+                    Execute(code, (ref long p1) => p1 = Input.Dequeue());
                     break;
                 case OpCode.Output:
-                    Execute(code, delegate (ref long p1) { Output.Enqueue(p1); });
+                    Execute(code, (ref long p1) => Output.Enqueue(p1));
                     break;
                 case OpCode.JumpTrue:
-                    Execute(code, delegate (ref long p1, ref long p2)
+                    Execute(code, (ref long p1, ref long p2) =>
                     {
                         if (p1 != 0) InstructionPointer = p2;
                     });
                     break;
                 case OpCode.JumpFalse:
-                    Execute(code, delegate (ref long p1, ref long p2)
-                    {
-                        if (p1 == 0) InstructionPointer = p2;
-                    });
+                    Execute(code, (ref long p1, ref long p2) =>
+                   {
+                       if (p1 == 0) InstructionPointer = p2;
+                   });
                     break;
                 case OpCode.LessThan:
-                    Execute(code, delegate (ref long p1, ref long p2, ref long p3) { p3 = p1 < p2 ? 1 : 0; });
+                    Execute(code, (ref long p1, ref long p2, ref long p3) => p3 = p1 < p2 ? 1 : 0);
                     break;
                 case OpCode.Equals:
-                    Execute(code, delegate (ref long p1, ref long p2, ref long p3) { p3 = p1 == p2 ? 1 : 0; });
+                    Execute(code, (ref long p1, ref long p2, ref long p3) => p3 = p1 == p2 ? 1 : 0);
                     break;
                 case OpCode.Relative:
-                    Execute(code, delegate(ref long p1) { RelativeBase += p1; });
+                    Execute(code, (ref long p1) => RelativeBase += p1);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(opCode), opCode.ToString());
