@@ -5,54 +5,22 @@ namespace AoC.Tests
 {
     public class Puzzle2Tests
     {
-        [Fact]
-        public void Test1()
+        public class Part1
         {
-            var memory = new Memory(new[] { 1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50 });
-            var computer = new ProgramRunner(memory);
-            computer.Execute();
+            [Theory]
+            [InlineData(new long[] { 1, 0, 0, 0, 99 }, new long[] { 2, 0, 0, 0, 99 })]
+            [InlineData(new long[] { 2, 3, 0, 3, 99 }, new long[] { 2, 3, 0, 6, 99 })]
+            [InlineData(new long[] { 2, 4, 4, 5, 99, 0 }, new long[] { 2, 4, 4, 5, 99, 9801 })]
+            [InlineData(new long[] { 1, 1, 1, 4, 99, 5, 6, 0, 99 }, new long[] { 30, 1, 1, 4, 2, 5, 6, 0, 99 })]
+            [InlineData(new long[] { 1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50 }, new long[] { 3500, 9, 10, 70, 2, 3, 11, 0, 99, 30, 40, 50 })]
+            public void Examples(long[] program, long[] expectedOutput)
+            {
+                var memory = new Memory(program);
+                var computer = new ProgramRunner(memory);
+                computer.Execute();
 
-            Assert.Equal(3500, memory.Program[0]);
-        }
-
-        [Fact]
-        public void Test2()
-        {
-            var memory = new Memory(new[] { 1, 0, 0, 0, 99 });
-            var computer = new ProgramRunner(memory);
-            computer.Execute();
-
-            Assert.Equal(2, memory.Program[0]);
-        }
-
-        [Fact]
-        public void Test3()
-        {
-            var memory = new Memory(new[] { 2, 3, 0, 3, 99 });
-            var computer = new ProgramRunner(memory);
-            computer.Execute();
-
-            Assert.Equal(2, memory.Program[0]);
-        }
-
-        [Fact]
-        public void Test4()
-        {
-            var memory = new Memory(new[] { 2, 4, 4, 5, 99, 0 });
-            var computer = new ProgramRunner(memory);
-            computer.Execute();
-
-            Assert.Equal(2, memory.Program[0]);
-        }
-
-        [Fact]
-        public void Test5()
-        {
-            var memory = new Memory(new[] { 1, 1, 1, 4, 99, 5, 6, 0, 99 });
-            var computer = new ProgramRunner(memory);
-            computer.Execute();
-
-            Assert.Equal(30, memory.Program[0]);
+                Assert.Equal(expectedOutput, memory.Program);
+            }
         }
     }
 }
