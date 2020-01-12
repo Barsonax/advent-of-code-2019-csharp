@@ -17,6 +17,9 @@ namespace AoC.Tests
                 Add(new PuzzleResult("puzzle2",
                     new PuzzlePartResult(6627023),
                     new PuzzlePartResult(4019)));
+                Add(new PuzzleResult("puzzle3",
+                    new PuzzlePartResult(3247),
+                    new PuzzlePartResult(48054)));
                 Add(new PuzzleResult("puzzle4",
                     new PuzzlePartResult(1790),
                     new PuzzlePartResult(1206)));
