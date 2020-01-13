@@ -46,32 +46,5 @@ namespace AoC.Tests
                 Assert.Equal(expectedOutput, vm.Output.Peek());
             }
         }
-
-        public class OpCodeParseData : TheoryData<int, int, OpCode, ParameterMode[]>
-        {
-            public OpCodeParseData()
-            {
-                Add(1099, 3, OpCode.End, new[] { ParameterMode.Position, ParameterMode.Immediate, ParameterMode.Position });
-                Add(1002, 3, OpCode.Multiply, new[] { ParameterMode.Position, ParameterMode.Immediate, ParameterMode.Position });
-                Add(11002, 3, OpCode.Multiply, new[] { ParameterMode.Position, ParameterMode.Immediate, ParameterMode.Immediate });
-            }
-        }
-
-        [Theory]
-        [ClassData(typeof(OpCodeParseData))]
-        public void ParseOpCode(int code, int parameterCount, OpCode expectedOpCode, ParameterMode[] expectedParameterModes)
-        {
-            var opCode = IntCodeVM.ParseOpCode(code);
-
-            var parameters = new ParameterMode[parameterCount];
-
-            for (int i = 0; i < parameters.Length; i++)
-            {
-                parameters[i] = IntCodeVM.ParseParameterMode(code, i);
-            }
-
-            Assert.Equal(expectedOpCode, opCode);
-            Assert.Equal(expectedParameterModes, parameters);
-        }
     }
 }

@@ -6,20 +6,16 @@ namespace AoC
 {
     public class IntCodeVM
     {
-        private static readonly int[] ParameterMasks = Enumerable.Range(0, 4).Select(x => 100 * (int)Math.Pow(10, x)).ToArray();
-
         public Queue<long> Input { get; } = new Queue<long>();
         public Queue<long> Output { get; } = new Queue<long>();
+        public VirtualMemory Memory { get; }
+        public IntCodeVM(long[] memory) => Memory = new VirtualMemory(memory.ToArray());
+        public long ConsumeInstructionPointer() => _instructionPointer++;
 
-        public long[] Memory { get; private set; }
-        public long InstructionPointer { get; private set; }
-        public long RelativeBase { get; private set; }
+        private long _instructionPointer, _relativeBase;
 
-        public IntCodeVM(long[] memory) => Memory = memory.ToArray();
-
-        public void ExecuteOpCode(long code, OpCode opCode)
+        public void ExecuteOpCode(int code, OpCode opCode)
         {
-            InstructionPointer++;
             switch (opCode)
             {
                 case OpCode.Add:
@@ -37,13 +33,13 @@ namespace AoC
                 case OpCode.JumpTrue:
                     Execute(code, (ref long p1, ref long p2) =>
                     {
-                        if (p1 != 0) InstructionPointer = p2;
+                        if (p1 != 0) _instructionPointer = p2;
                     });
                     break;
                 case OpCode.JumpFalse:
                     Execute(code, (ref long p1, ref long p2) =>
                    {
-                       if (p1 == 0) InstructionPointer = p2;
+                       if (p1 == 0) _instructionPointer = p2;
                    });
                     break;
                 case OpCode.LessThan:
@@ -53,7 +49,7 @@ namespace AoC
                     Execute(code, (ref long p1, ref long p2, ref long p3) => p3 = p1 == p2 ? 1 : 0);
                     break;
                 case OpCode.Relative:
-                    Execute(code, (ref long p1) => RelativeBase += p1);
+                    Execute(code, (ref long p1) => _relativeBase += p1);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(opCode), opCode.ToString());
@@ -70,53 +66,37 @@ namespace AoC
             return this;
         }
 
-        public static OpCode ParseOpCode(long code) => (OpCode)(code % 100);
+        public static OpCode ParseOpCode(int code) => (OpCode)(code % 100);
 
-        public static ParameterMode ParseParameterMode(long code, int parameterPosition) => (ParameterMode)(code / ParameterMasks[parameterPosition] % 10);
-
-        private void Execute(long code, RefAction<long, long, long> action)
+        private void Execute(int code, RefAction<long, long, long> action)
         {
-            var p1 = GetParameterMemoryAddress(code, 0);
-            var p2 = GetParameterMemoryAddress(code, 1);
-            var p3 = GetParameterMemoryAddress(code, 2);
+            var p1 = GetParameterAddress(code.Digit100());
+            var p2 = GetParameterAddress(code.Digit1000());
+            var p3 = GetParameterAddress(code.Digit10000());
+            Memory.Reserve(p1, p2, p3);
             action(ref Memory[p1], ref Memory[p2], ref Memory[p3]);
         }
 
-        private void Execute(long code, RefAction<long, long> action)
+        private void Execute(int code, RefAction<long, long> action)
         {
-            var p1 = GetParameterMemoryAddress(code, 0);
-            var p2 = GetParameterMemoryAddress(code, 1);
+            var p1 = GetParameterAddress(code.Digit100());
+            var p2 = GetParameterAddress(code.Digit1000());
+            Memory.Reserve(p1, p2);
             action(ref Memory[p1], ref Memory[p2]);
         }
 
-        private void Execute(long code, RefAction<long> action)
+        private void Execute(int code, RefAction<long> action)
         {
-            var p1 = GetParameterMemoryAddress(code, 0);
+            var p1 = GetParameterAddress(code.Digit100());
+            Memory.Reserve(p1);
             action(ref Memory[p1]);
         }
 
-        private long GetParameterMemoryAddress(long code, int position)
+        private long GetParameterAddress(int mode) => (ParameterMode)mode switch
         {
-            var index = ParseParameterMode(code, position) switch
-            {
-                ParameterMode.Immediate => InstructionPointer,
-                ParameterMode.Position => Memory[InstructionPointer],
-                ParameterMode.Relative => RelativeBase + Memory[InstructionPointer],
-            };
-            InstructionPointer++;
-
-            if (index >= Memory.Length)
-            {
-                var newMemory = new long[index + 1];
-                for (int i = 0; i < Memory.Length; i++)
-                {
-                    newMemory[i] = Memory[i];
-                }
-
-                Memory = newMemory;
-            }
-
-            return index;
-        }
+            ParameterMode.Immediate => ConsumeInstructionPointer(),
+            ParameterMode.Position => Memory[ConsumeInstructionPointer()],
+            ParameterMode.Relative => _relativeBase + Memory[ConsumeInstructionPointer()],
+        };
     }
 }

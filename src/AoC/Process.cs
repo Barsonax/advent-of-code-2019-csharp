@@ -10,7 +10,7 @@
         {
             while (true)
             {
-                var code = _vm.Memory[_vm.InstructionPointer];
+                var code = (int)_vm.Memory[_vm.ConsumeInstructionPointer()];
                 var opCode = IntCodeVM.ParseOpCode(code);
                 if (opCode == OpCode.End)
                 {

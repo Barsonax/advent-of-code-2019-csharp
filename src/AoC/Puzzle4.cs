@@ -39,12 +39,12 @@ namespace AoC
 
         public static void ExtractDigits(int number, int[] digitBuffer)
         {
-            digitBuffer[0] = number / 100000 % 10;
-            digitBuffer[1] = number / 10000 % 10;
-            digitBuffer[2] = number / 1000 % 10;
-            digitBuffer[3] = number / 100 % 10;
-            digitBuffer[4] = number / 10 % 10;
-            digitBuffer[5] = number % 10;
+            digitBuffer[0] = number.Digit100000();
+            digitBuffer[1] = number.Digit10000();
+            digitBuffer[2] = number.Digit1000();
+            digitBuffer[3] = number.Digit100();
+            digitBuffer[4] = number.Digit10();
+            digitBuffer[5] = number.Digit1();
         }
 
         private static bool DigitsNeverDecrease(int[] digits)

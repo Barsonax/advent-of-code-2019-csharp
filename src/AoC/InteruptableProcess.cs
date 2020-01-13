@@ -20,7 +20,7 @@ namespace AoC
 
         public bool MoveNext()
         {
-            var code = _vm.Memory[_vm.InstructionPointer];
+            var code = (int)_vm.Memory[_vm.ConsumeInstructionPointer()];
             var opCode = IntCodeVM.ParseOpCode(code);
 
             Current = opCode;
